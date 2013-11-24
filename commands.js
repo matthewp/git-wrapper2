@@ -1,5 +1,3 @@
-var setDir = require('./utils').setDir;
-
 /*
  * Checks to see if this is a git repository
 **/
