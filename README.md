@@ -47,9 +47,44 @@ Clones a repository to the destination `dir`.
 
 Performs a `git pull` command against the repository. If `remote` or `branch` are not provided they will default to `origin` and `master` respectively.
 
-  * `remote`   String.          Remote name.
+  * `remote`   String.          Name of the remote target.
   * `branch`   String.          Branch name to pull.
   * `callback` Function.        `callback(err, msg)`.
+
+### git.add(which, callback)
+
+Perform a `git add` command, staging files for a commit.
+
+  * `which`    String.          Which files to stage, seperated by spaces.
+  * `callback` Function.        `callback(err, msg)`.
+
+### git.commit(msg, callback)
+
+Commits staged changes with the given `msg` as the commit message.
+
+  * `msg`      String.          Body of the commit message.
+  * `callback` Function.        `callback(err, msg)`.
+
+### git.push([remote], [branch], callback)
+
+Pushes changes in the local repository to a remote. If `remote` or `branch` are not provided, the defaults will be `origin` and `master` respectively.
+
+  * `remote`   String.          Name of the remote target.
+  * `callback` Function.        `callback(err, msg)`.
+
+### git.save(msg, callback)
+
+Convenience function for performing `git.add`, `git.commit`, and `git.push` in one function call. Using this will automatically stage all unstaged changes, commit, and then push.
+
+  * `msg`      String.          Body of the commit message.
+  * `callback` Function.        `callback(err, msg)`.
+
+### git.log(options, callback)
+
+Performs a `git log` command, returning the results. `options` are an array of command line options you might want to provide, such as `['-n', 2]` to limit the results to only the last 2 commits.
+
+  * `options`   Array.          Command line options for the `git log` command.
+  * `calllback` Function.       `callback(err, msg)`.
 
 ## Bugs and Issues
 
