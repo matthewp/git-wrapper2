@@ -1,17 +1,17 @@
 {
-  "name": "git-wrapper",
-  "description": "a wrapper around the git executable",
+  "name": "git-wrapper2",
+  "description": "A wrapper around the git executable with convenience functions for common commands",
   "tags": [
     "git"
   ],
-  "version": "0.1.1",
-  "author": "Paul Vorbach <paul@vorb.de> (http://paul.vorba.ch/)",
+  "version": "0.1.2",
+  "author": "Matthew Phillips <matthew@matthewphillips.info> (http://www.matthewphillips.info)",
   "repository": {
     "type": "git",
-    "url": "git://github.com/pvorb/node-git-wrapper.git"
+    "url": "http://code.matthewphillips.info/git/matthew/git-wrapper2.git"
   },
   "bugs": {
-    "url": "https://github.com/pvorb/node-git-wrapper/issues"
+    "url": "http://code.matthewphillips.info/matthew/git-wrapper2/issues"
   },
   "main": "./git.js",
   "engines": {
@@ -19,8 +19,8 @@
   },
   "licenses": [
     {
-      "type": "MIT license",
-      "url": "http://vorb.de/license/mit.html"
+      "type": "MIT",
+      "url": "http://opensource.org/licenses/MIT"
     }
   ],
   "dependencies": {},
