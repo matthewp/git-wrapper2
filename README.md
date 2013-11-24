@@ -1,7 +1,7 @@
-git-wrapper
+git-wrapper2
 ===========
 
-a wrapper around the git executable
+A wrapper around the git executable. Built on top of the original [git-wrapper](https://github.com/pvorb/node-git-wrapper), **git-wrapper2** provides additional convenience functions for commit git tasks, like `commit`ing changes and `push`ing them to a remote repository. Additionally git-wrapper2 emits events for many tasks so that you can observe changes throughout your application.
 
 ## Installation
 
@@ -85,6 +85,22 @@ Performs a `git log` command, returning the results. `options` are an array of c
 
   * `options`   Array.          Command line options for the `git log` command.
   * `calllback` Function.       `callback(err, msg)`.
+
+## Events
+
+Several events are emitted when actions are performed against a git repository.
+
+### clone
+
+Emitted when the repository is cloned.
+
+### commit
+
+Emitted when a `commit` occurs.
+
+### saved
+
+Emitted when a full `save` operation is performed and completed.
 
 ## Bugs and Issues
 
