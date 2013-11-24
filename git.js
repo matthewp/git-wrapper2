@@ -5,12 +5,20 @@ var exec = require('child_process').exec;
 var commands = require('./commands');
 var EventEmitter = require('events').EventEmitter;
 var inherits = require('util').inherits;
+var setDir = require('./utils').setDir;
 
 // Class Git
 var Git = module.exports = function (options) {
   this.binary = 'git';
-  if (typeof options == 'undefined')
-    options = {};
+  options = options || {};
+
+  // if a gitDir is provided, make sure we are chdir-ed into
+  // the directory before performing git operations.
+  var gitDir = options['git-dir'];
+  if(gitDir) {
+    var dir = path.dirname(gitDir);
+    this.exec = setDir(dir, this.exec);
+  }
 
   this.args = Git.optionsToString(options);
 };
