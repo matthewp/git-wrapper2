@@ -5,7 +5,7 @@ a wrapper around the git executable
 
 ## Installation
 
-    npm install git-wrapper
+    npm install git-wrapper2
 
 ## API
 
@@ -29,28 +29,28 @@ available commands.
                                 files for `git add`.
   * `callback`  Function.       `callback(err, msg)`.
 
+### git.isRepo(callback);
+
+Checks to see if the directory is a git repository. Callback returns a `boolean` indicating whether it is or not.
+
+  * `callback` Function.        `callback(isRepo)`.
+
+### git.clone(repo, dir, callback);
+
+Clones a repository to the destination `dir`.
+
+  * `repo`     String.          Remote repository.
+  * `dir`      String.          Local directory to clone into.
+  * `cal.back` Function.        `callback(err, msg)`.
+
+### git.pull([remote], [branch], callback)
+
+Performs a `git pull` command against the repository. If `remote` or `branch` are not provided they will default to `origin` and `master` respectively.
+
+  * `remote`   String.          Remote name.
+  * `branch`   String.          Branch name to pull.
+  * `callback` Function.        `callback(err, msg)`.
+
 ## Bugs and Issues
 
-If you encounter any bugs or issues, feel free to
-[open an issue](https://github.com/pvorb/node-git-wrapper/issues) at github.
-
-## License
-
-Copyright © 2012 Paul Vorbach
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the “Software”), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
-the Software, and to permit persons to whom the Software is furnished to do so,
-subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
-FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
-COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
-IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, OUT OF OR IN CONNECTION WITH THE
-SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+If you encounter any bugs or issues, feel free to email me at matthew at matthewphillips.info.
