@@ -2,6 +2,9 @@
 var fs = require('fs');
 var path = require('path');
 var exec = require('child_process').exec;
+var commands = require('./commands');
+var EventEmitter = require('events').EventEmitter;
+var inherits = require('util').inherits;
 
 // Class Git
 var Git = module.exports = function (options) {
@@ -11,6 +14,8 @@ var Git = module.exports = function (options) {
 
   this.args = Git.optionsToString(options);
 };
+
+inherits(Git, EventEmitter);
 
 // git.exec(command [[, options], args ], callback)
 Git.prototype.exec = function (command, options, args, callback) {
@@ -59,3 +64,7 @@ Git.optionsToString = function (options) {
 
   return args.join(' ');
 };
+
+Object.keys(commands).forEach(function(key) {
+  Git.prototype[key] = commands[key];
+});
