@@ -26,7 +26,7 @@ var Git = module.exports = function (options) {
 
       setDir(dir, function(){
         exec.apply(self, args);
-      });
+      })();
     };
   }
 
