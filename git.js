@@ -17,7 +17,17 @@ var Git = module.exports = function (options) {
   var gitDir = options['git-dir'];
   if(gitDir) {
     var dir = path.dirname(gitDir);
-    this.exec = setDir(dir, this.exec);
+    var exec = this.exec.bind(this);
+    this.exec = function(command){
+      var self = this, args = arguments;
+      if(command.indexOf('clone') === 0) {
+        return exec.apply(self, args);
+      }
+
+      setDir(dir, function(){
+        exec.apply(self, args);
+      });
+    };
   }
 
   this.args = Git.optionsToString(options);

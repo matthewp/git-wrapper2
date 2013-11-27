@@ -1,4 +1,5 @@
 var fs = require('fs');
+var mkdirp = require('mkdirp');
 
 /*
 * Ensure that the repository exists.
@@ -6,7 +7,7 @@ var fs = require('fs');
 var ensureExists = exports.ensureExists = function(gitDir, callback){
  fs.exists(gitDir, function(exists){
    if(!exists){
-     return fs.mkdir(gitDir, function(err){
+     return mkdirp(gitDir, function(err){
        callback(err || void 0);
      });
    }

@@ -23,7 +23,9 @@
       "url": "http://opensource.org/licenses/MIT"
     }
   ],
-  "dependencies": {},
+  "dependencies": {
+    "mkdirp": "~0.3.5"
+  },
   "devDependencies": {},
   "optionalDependencies": {}
 }
