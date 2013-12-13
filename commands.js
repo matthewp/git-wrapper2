@@ -48,6 +48,15 @@ var add = exports.add = function(which, callback){
 };
 
 /*
+ * Remove files for a commit.
+**/
+var rm = exports.rm = function(which, callback) {
+  which = Array.isArray(which) ? which.join(' ') : which;
+  var cmd = 'rm ' + which;
+  this.exec(cmd, callback);
+};
+
+/*
  * Commit the repo.
 **/
 var commit = exports.commit = function(msg, callback){
