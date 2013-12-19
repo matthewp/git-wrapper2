@@ -60,10 +60,8 @@ Git.prototype.exec = function (command, options, args, callback) {
 };
 
 // git.spawn(command [, args], callback
-Git.prototype.spawn = function(command, args, callback) {
-  callback = arguments[arguments.length - 1];
-
-  if(arguments.length == 2) {
+Git.prototype.spawn = function(command, args) {
+  if(arguments.length == 1) {
     args = [];
   }
   command = Array.isArray(command) ? command : [command];
