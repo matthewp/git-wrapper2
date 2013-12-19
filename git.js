@@ -2,6 +2,7 @@
 var fs = require('fs');
 var path = require('path');
 var exec = require('child_process').exec;
+var spawn = require('child_process').spawn;
 var commands = require('./commands');
 var EventEmitter = require('events').EventEmitter;
 var inherits = require('util').inherits;
@@ -56,6 +57,37 @@ Git.prototype.exec = function (command, options, args, callback) {
   exec(cmd, function (err, stdout, stderr) {
     callback(err, stdout);
   });
+};
+
+// git.spawn(command [, args], callback
+Git.prototype.spawn = function(command, args, callback) {
+  callback = arguments[arguments.length - 1];
+
+  if(arguments.length == 2) {
+    args = [];
+  }
+  command = Array.isArray(command) ? command : [command];
+  args = command.concat(args);
+  
+  var stream = spawn(this.binary, args);
+  return stream;
+};
+
+// Uses spawn instead of exec for the next command.
+Git.prototype.stream = function() {
+  var exec = this.exec;
+
+  this.exec = function(){
+    var stream = this.spawn.apply(this, arguments);
+
+    stream.on('end', function(){
+      this.exec = exec;
+    }.bind(this));
+
+    return stream;
+  }.bind(this);
+
+  return this;
 };
 
 // converts an object that contains key value pairs to a argv string

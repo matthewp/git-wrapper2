@@ -1,9 +1,11 @@
+var Readable = require('stream').Readable;
+
 /*
  * Checks to see if this is a git repository
 **/
 var isRepo = exports.isRepo = function(callback){
 	var answer = true;
-	this.exec('status', function(err, msg){
+	return this.exec('status', function(err, msg){
 		if(err){
 			answer = err.toString().indexOf('Not a git repository') === -1;
 		}
@@ -15,8 +17,8 @@ var isRepo = exports.isRepo = function(callback){
  * Clone the repository.
 **/
 var clone = exports.clone = function(repo, dir, callback){
-	var cmd = 'clone ' + repo + ' ' + dir;
-	this.exec(cmd, function(){
+  var args = [repo, dir];
+	return this.exec('clone', args, function(){
     this.emit('clone', repo, dir);
     callback.apply(this, arguments);
   }.bind(this));
@@ -35,33 +37,32 @@ var pull = exports.pull = function(remote, branch, callback){
     branch = 'master';
   }
 
-  var opts = ['pull', remote, branch].join(' ');
-	this.exec(opts, callback);
+  var args = [remote, branch];
+	return this.exec('pull', args, callback);
 };
 
 /*
  * Add files for a commit.
 **/
 var add = exports.add = function(which, callback){
-	var cmd = 'add ' + which;
-	this.exec(cmd, callback);
+	var cmd = 'add', args = [which];
+	return this.exec(cmd, args, callback);
 };
 
 /*
  * Remove files for a commit.
 **/
 var rm = exports.rm = function(which, callback) {
-  which = Array.isArray(which) ? which.join(' ') : which;
-  var cmd = 'rm ' + which;
-  this.exec(cmd, callback);
+  which = Array.isArray(which) ? which : [which];
+  this.exec('rm', which, callback);
 };
 
 /*
  * Commit the repo.
 **/
 var commit = exports.commit = function(msg, callback){
-	var cmd = 'commit -m "' + msg + '"';
-	this.exec(cmd, function(){
+  var args = ['-m', '"' + msg + '"'];
+	return this.exec('commit', args, function(){
     this.emit('commit', msg);
     callback.apply(this, arguments);
   }.bind(this));
@@ -80,8 +81,8 @@ var push = exports.push = function(remote, branch, callback){
     branch = 'master';
   }
 
-  var opts = ['push', remote, branch].join(' ');
-	this.exec(opts, callback);
+  var args = [remote, branch];
+	return this.exec('push', args, callback);
 };
 
 /*
@@ -109,6 +110,5 @@ exports.log = function(options, callback) {
     callback = options;
     options = [];
   }
-  var cmd = 'log ' + options.join(' ');
-  this.exec(cmd, callback);
+  return this.exec('log', options, callback);
 };
