@@ -1,4 +1,4 @@
-var Readable = require('stream').Readable;
+var EventEmitter = require('events').EventEmitter;
 
 /*
  * Checks to see if this is a git repository
@@ -16,18 +16,21 @@ var isRepo = exports.isRepo = function(callback){
 /*
  * Clone the repository.
 **/
-var clone = exports.clone = function(repo, dir, callback){
+var clone = exports.clone = function(repo, dir){
   var args = [repo, dir];
-	return this.exec('clone', args, function(){
+
+	var child = this.spawn('clone', args);
+  child.on('exit', function(){
     this.emit('clone', repo, dir);
-    callback.apply(this, arguments);
   }.bind(this));
+
+  return child;
 };
 
 /*
  * Pull latest from the repository
 **/
-var pull = exports.pull = function(remote, branch, callback){
+var pull = exports.pull = function(remote, branch){
   if(typeof remote == 'function') {
     callback = remote;
     remote = 'origin';
@@ -38,77 +41,107 @@ var pull = exports.pull = function(remote, branch, callback){
   }
 
   var args = [remote, branch];
-	return this.exec('pull', args, callback);
+	return this.spawn('pull', args);
 };
 
 /*
  * Add files for a commit.
 **/
-var add = exports.add = function(which, callback){
+var add = exports.add = function(which){
 	var cmd = 'add', args = [which];
-	return this.exec(cmd, args, callback);
+	var child = this.spawn(cmd, args);
+  return child;
 };
 
 /*
  * Remove files for a commit.
 **/
-var rm = exports.rm = function(which, callback) {
+var rm = exports.rm = function(which) {
   which = Array.isArray(which) ? which : [which];
-  this.exec('rm', which, callback);
+  return this.spawn('rm', which);
 };
 
 /*
  * Commit the repo.
 **/
-var commit = exports.commit = function(msg, callback){
+var commit = exports.commit = function(msg){
   var args = ['-m', '"' + msg + '"'];
-	return this.exec('commit', args, function(){
+	
+  var child = this.spawn('commit', args);
+  child.on('exit', function(){
     this.emit('commit', msg);
-    callback.apply(this, arguments);
   }.bind(this));
+
+  return child;
 };
 
 /*
  * Push to master
 **/
-var push = exports.push = function(remote, branch, callback){
-  if(typeof remote == 'function') {
-    callback = remote;
+var push = exports.push = function(remote, branch){
+  if(typeof remote == 'undefined') {
     remote = 'origin';
     branch = 'master';
-  } else if(typeof branch == 'function') {
-    callback = branch;
+  } else if(typeof branch == 'undefined') {
     branch = 'master';
   }
 
   var args = [remote, branch];
-	return this.exec('push', args, callback);
+	return this.spawn('push', args);
 };
 
 /*
  * Save - Does commit and push at once.
 **/
-exports.save = function(msg, callback){
-	this.add('.', function(err) {
-		if(err) return callback(err);
+exports.save = function(msg){
+  var ee = new EventEmitter(), self = this;
 
-		this.commit(msg, function(err){
-			if(err) return callback(err);
-			this.push(function(){
-        this.emit('saved', msg);
-        callback.apply(this, arguments);
-      }.bind(this));
-		}.bind(this));
-	}.bind(this));
+  var children = [
+    this.add.bind(this, '-A'),
+    this.commit.bind(this, msg),
+    this.push.bind(this)
+  ];
+
+  var listenAndEmit = function(child){
+    var stdout = child.stdout;
+    var stderr = child.stderr;
+
+    stdout.setEncoding('utf8');
+    stderr.setEncoding('utf8');
+
+    stdout.on('data', function(data){
+      ee.emit('data', data);
+    });
+
+    stderr.on('data', function(data){
+      ee.emit('error', data);
+    });
+  };
+
+  var next = function(){
+    var child = children.shift()();
+    listenAndEmit(child);
+
+    child.on('exit', function(){
+      if(children.length) {
+        return next();
+      }
+      self.emit('saved', msg);
+      ee.emit('end');
+    });
+  };
+  next();
+
+  return ee;
 };
 
 /*
  * Call `git log`, optionally with arguments
 **/
-exports.log = function(options, callback) {
+exports.log = function(options) {
   if(typeof options == 'function') {
     callback = options;
     options = [];
   }
-  return this.exec('log', options, callback);
+  return this.spawn('log', options);
 };

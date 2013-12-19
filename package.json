@@ -4,7 +4,7 @@
   "tags": [
     "git"
   ],
-  "version": "0.1.8",
+  "version": "0.2.0",
   "author": "Matthew Phillips <matthew@matthewphillips.info> (http://www.matthewphillips.info)",
   "repository": {
     "type": "git",
@@ -24,7 +24,6 @@
     }
   ],
   "dependencies": {
-    "mkdirp": "~0.3.5"
   },
   "devDependencies": {},
   "optionalDependencies": {}
