@@ -65,7 +65,7 @@ var rm = exports.rm = function(which) {
  * Commit the repo.
 **/
 var commit = exports.commit = function(msg){
-  var args = ['-m', '"' + msg + '"'];
+  var args = ['-m', msg];
 	
   var child = this.spawn('commit', args);
   child.on('exit', function(){
@@ -122,12 +122,12 @@ exports.save = function(msg){
     var child = children.shift()();
     listenAndEmit(child);
 
-    child.on('exit', function(){
+    child.on('exit', function(code){
       if(children.length) {
         return next();
       }
       self.emit('saved', msg);
-      ee.emit('end');
+      ee.emit('end', code);
     });
   };
   next();
