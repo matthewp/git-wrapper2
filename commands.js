@@ -145,3 +145,19 @@ exports.log = function(options) {
   }
   return this.spawn('log', options);
 };
+
+/*
+ * Calls `git branch`
+ */
+exports.branch = function(name, args) {
+  args = (args || []).concat([name]);
+  this.spawn('branch', args);
+};
+
+/*
+ * Calls `git checkout`
+ */
+exports.checkout = function(branch, args) {
+  args = (args || []).concat([branch]);
+  this.spawn('checkout', args);
+};
