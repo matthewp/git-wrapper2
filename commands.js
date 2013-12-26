@@ -151,7 +151,7 @@ exports.log = function(options) {
  */
 exports.branch = function(name, args) {
   args = (args || []).concat([name]);
-  this.spawn('branch', args);
+  return this.spawn('branch', args);
 };
 
 /*
@@ -159,5 +159,5 @@ exports.branch = function(name, args) {
  */
 exports.checkout = function(branch, args) {
   args = (args || []).concat([branch]);
-  this.spawn('checkout', args);
+  return this.spawn('checkout', args);
 };
