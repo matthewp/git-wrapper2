@@ -161,3 +161,11 @@ exports.checkout = function(branch, args) {
   args = (args || []).concat([branch]);
   return this.spawn('checkout', args);
 };
+
+/*
+ * Calls `git show`
+ */
+exports.show = function(sha1, file, args) {
+  args = (args || []).concat([sha1 + ':' + file]);
+  return this.spawn('show', args);
+};
