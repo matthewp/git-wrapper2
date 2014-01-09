@@ -64,8 +64,8 @@ var rm = exports.rm = function(which) {
 /*
  * Commit the repo.
 **/
-var commit = exports.commit = function(msg){
-  var args = ['-m', msg];
+var commit = exports.commit = function(msg, args){
+  args = (args || []).concat(['-m', msg]);
 	
   var child = this.spawn('commit', args);
   child.on('exit', function(){
@@ -93,12 +93,12 @@ var push = exports.push = function(remote, branch){
 /*
  * Save - Does commit and push at once.
 **/
-exports.save = function(msg){
+exports.save = function(msg, commitargs){
   var ee = new EventEmitter(), self = this;
 
   var children = [
     this.add.bind(this, '-A'),
-    this.commit.bind(this, msg),
+    this.commit.bind(this, msg, commitargs),
     this.push.bind(this)
   ];
 
