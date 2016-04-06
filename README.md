@@ -35,13 +35,15 @@ Checks to see if the directory is a git repository. Callback returns a `boolean`
 
   * `callback` Function.        `callback(isRepo)`.
 
-### git.clone(repo, dir, callback);
+### git.clone(repo, dir);
 
 Clones a repository to the destination `dir`.
 
   * `repo`     String.          Remote repository.
   * `dir`      String.          Local directory to clone into.
-  * `cal.back` Function.        `callback(err, msg)`.
+
+Events
+  * `clone`    repo, dir        
 
 ### git.pull([remote], [branch], callback)
 
@@ -58,12 +60,16 @@ Perform a `git add` command, staging files for a commit.
   * `which`    String.          Which files to stage, seperated by spaces.
   * `callback` Function.        `callback(err, msg)`.
 
-### git.commit(msg, callback)
+### git.commit(msg, args)
 
 Commits staged changes with the given `msg` as the commit message.
 
   * `msg`      String.          Body of the commit message.
-  * `callback` Function.        `callback(err, msg)`.
+  * `args`     Array.           Commit args.
+
+Events
+
+  * `commit`   msg              Commit message.
 
 ### git.push([remote], [branch], callback)
 
@@ -72,12 +78,17 @@ Pushes changes in the local repository to a remote. If `remote` or `branch` are 
   * `remote`   String.          Name of the remote target.
   * `callback` Function.        `callback(err, msg)`.
 
-### git.save(msg, callback)
+### git.save(msg)
 
 Convenience function for performing `git.add`, `git.commit`, and `git.push` in one function call. Using this will automatically stage all unstaged changes, commit, and then push.
 
   * `msg`      String.          Body of the commit message.
-  * `callback` Function.        `callback(err, msg)`.
+
+Events
+
+  * `data`     data             stdout
+  * `error`    data             stderr
+  * `end`      code             Exit code
 
 ### git.log(options, callback)
 
