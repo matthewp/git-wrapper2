@@ -90,6 +90,15 @@ Events
   * `error`    data             stderr
   * `end`      code             Exit code
 
+Example
+
+```
+git.save('commit msg')
+  .on('error', function(err) {
+    console.log(err);
+  });
+```
+
 ### git.log(options, callback)
 
 Performs a `git log` command, returning the results. `options` are an array of command line options you might want to provide, such as `['-n', 2]` to limit the results to only the last 2 commits.
